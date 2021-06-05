@@ -1,7 +1,42 @@
+import 'package:bootcamp/model/photos_model.dart';
 import 'package:bootcamp/widgets/top_var.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:bootcamp/env/keys.dart' as config;
 
-class HomepageScreen extends StatelessWidget {
+class HomepageScreen extends StatefulWidget {
+  @override
+  _HomepageScreenState createState() => _HomepageScreenState();
+}
+
+class _HomepageScreenState extends State<HomepageScreen> {
+  List<PhotosModel> _photosData = [];
+
+  Future<void> _fetchPhotos() async {
+    final _dioInstance = Dio();
+
+    _dioInstance.options.headers['Authorization'] =
+        "Client-ID ${config.unsplashKey}";
+
+    final _fetchData =
+        await _dioInstance.get('https://api.unsplash.com/photos');
+
+    for (var _items in _fetchData.data) {
+      setState(() {
+        _photosData.add(
+            PhotosModel(id: _items['id'], imgURL: _items['urls']['regular']));
+      });
+    }
+
+    print("object");
+  }
+
+  @override
+  void initState() {
+    _fetchPhotos();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +58,7 @@ class HomepageScreen extends StatelessWidget {
               const SizedBox(height: 10),
               GridView.builder(
                 padding: EdgeInsets.all(10),
-                itemCount: 4,
+                itemCount: _photosData.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -32,7 +67,7 @@ class HomepageScreen extends StatelessWidget {
                     crossAxisCount: 2),
                 itemBuilder: (ctx, index) => Container(
                   child: Image.network(
-                    'https://images.unsplash.com/photo-1622774161048-863b17ed0d8e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80',
+                    _photosData[index].imgURL,
                     fit: BoxFit.cover,
                   ),
                 ),
