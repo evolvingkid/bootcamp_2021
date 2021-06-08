@@ -1,8 +1,11 @@
 import 'package:bootcamp/model/photos_model.dart';
+import 'package:bootcamp/screens/profile_page.dart';
 import 'package:bootcamp/widgets/top_var.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:bootcamp/env/keys.dart' as config;
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 
 class HomepageScreen extends StatefulWidget {
   @override
@@ -45,10 +48,14 @@ class _HomepageScreenState extends State<HomepageScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TopBar(
-                title: 'mohammed fayez',
-                subtitle: 'Developer',
-                color: Color(0xff0B3D2E),
+              ValueListenableBuilder(
+                valueListenable: Hive.box('profile').listenable(),
+                builder: (BuildContext context, Box value, Widget? child) =>
+                    TopBar(
+                  title: value.get('name'),
+                  subtitle: 'Developer',
+                  color: Color(0xff0B3D2E),
+                ),
               ),
               const SizedBox(height: 10),
               Text(
@@ -75,6 +82,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(ProfileScreen.routeName);
+        },
+        child: Icon(Icons.edit),
       ),
     );
   }

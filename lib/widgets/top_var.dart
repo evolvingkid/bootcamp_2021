@@ -21,7 +21,7 @@ class TopBar extends StatelessWidget {
           CircleAvatar(
             radius: 40,
             backgroundImage: NetworkImage(
-                'https://images.unsplash.com/photo-1622658641558-235f26dd270b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'),
+                'https://images.unsplash.com/photo-1623124099135-948a22b49ad2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80'),
           ),
           const SizedBox(width: 10),
           Column(
